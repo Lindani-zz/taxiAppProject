@@ -1,0 +1,56 @@
+<div id="Input-Details">
+	
+	<h1>Input Details</h1>
+	<form action="/users/register/add" method="POST">
+	
+	<ol>
+	<br>
+		Full Name: <input type="text" name="firstName">	
+		
+		</br>
+		<br>
+		Surname: <input type="text" name="lastName">	
+		
+		</br>
+		<br>
+		Route Name:
+ 		<select>
+ 		{{#users}}
+ 		<option value="{{id}}">{{isOwner}}</option>
+		{{/users}}
+		
+		</br>
+		<br>
+		Address: <input type="text" name="address1">
+
+		</br>
+		<br>
+		Address: <input type="text" name="address2">
+
+		</br>
+		<br>
+		Address: <input type="text" name="address3">
+
+		</br>
+		<br>
+		Postal Code: <input type="text" name="postalCode">			
+		
+		</br>
+		<br>
+		User Name: <input type="text" name="userName">	
+		
+		</br>
+		<br>
+		Password: <input type="text" name="password">	
+		
+		</br>
+		<br>
+		Confirm Password: <input type="text" name="confirmPassword">	
+		<br></br>
+		<input type="submit">
+		</br>
+		</ol>
+		
+
+	</form>
+</div>

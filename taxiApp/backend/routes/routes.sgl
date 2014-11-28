@@ -1,0 +1,10 @@
+INSERT INTO  `routes` (  `routeName` ,  `fare` ,  `geoLocationTripStart` ,  `geoLocationTripEnd` ) VALUES ("khayeltsha-capetown", 20,  "",  "");
+
+INSERT INTO  `routes` (  `routeName` ,  `fare` ,  `geoLocationTripStart` ,  `geoLocationTripEnd` ) VALUES ("khayeltsha-Wynberg",15 ,  "",  "");
+
+INSERT INTO  `routes` (  `routeName` ,  `fare` ,  `geoLocationTripStart` ,  `geoLocationTripEnd` ) VALUES ("khayeltsha-Claremont", 13,  "",  "");
+
+INSERT INTO  `routes` (  `routeName` ,  `fare` ,  `geoLocationTripStart` ,  `geoLocationTripEnd` ) VALUES ("khayeltsha-Paarl", 21,  "",  "");
+
+INSERT INTO `users`(`id`, `firstName`, `lastName`, `userName`, `password`, `address1`, `address2`, `address3`, `postCode`, `isOwner`) VALUES ("","","","","","","","","","driver");
+INSERT INTO `users`(`id`, `firstName`, `lastName`, `userName`, `password`, `address1`, `address2`, `address3`, `postCode`, `isOwner`) VALUES ("","","","","","","","","","owner");

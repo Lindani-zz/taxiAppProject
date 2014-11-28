@@ -1,0 +1,55 @@
+<html>
+<head>
+	<title></title>
+</head>
+<link rel="stylesheet" type="text/css" href="ratchet.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+	$(function(argument) {
+		//// body...
+		//alert("aola");
+
+		$.get( "routes", function( data ) {
+  			$(".result").text( data[0].routeName );
+  			//alert( "Load was performed. " + data.length );
+		});
+
+		$(".ola").click(function(){
+			$.get( "users", function( data ) {
+  				  					$( "#contacts" ).html("");
+  					$.each(data, function(index, value){
+  						var details = "<a class=\"navigate-right\">" + value.firstName +" "+ value.lastName  + "</a>"
+  						$( "#contacts" ).append("<li class=\"table-view-cell\">" + details + "</li>");
+  					});
+  					//alert( "Load was performed. " + data.length );
+				});
+		});
+
+	})
+</script>
+<body>
+		<h1>the phone</h1>
+			<div class="result">
+			</div>
+				<button class="ola" >Display Users</button>
+		<!-- use append to create a list of contacts -->	
+				<ul id ="contacts">
+			
+			 		<li class="table-view-cell">
+	    				<a class="navigate-right">USER 1</a>
+	  				</li>
+	  				<li class="table-view-cell">
+	    				<a class="navigate-right">
+	      					USER 2
+	    				</a>
+	  				</li>
+	  				<li class="table-view-cell">
+	    				<a class="navigate-right">
+	      					USER 3
+	    				</a>
+	  				</li>
+
+
+				</ul>
+</body>
+</html>

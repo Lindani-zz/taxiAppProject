@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  
+    <meta charset="utf-8">
+    <title>Bruno Taxi Association</title>
+
+    <!-- Sets initial viewport load and disables zooming  -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+
+    <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- Include the compiled Ratchet CSS -->
+    <link href="css/ratchet.css" rel="stylesheet"><script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+
+    <!-- Include the compiled Ratchet JS -->
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="js/ratchet.js"></script>
+  
+  <script type="text/javascript" src="./index.js" />
+  <script type="text/javascript">
+  function onDeviceReady() {
+    //console.log("navigator.geolocation works well");
+    alert("!!!");
+  }
+
+
+
+
+  document.addEventListener("deviceready", onDeviceReady, false);
+
+  var onSuccess = function(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+};
+
+// onError Callback receives a PositionError object
+//
+function onError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
+
+//navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+  </script>
+
+
+  <body>
+
+    <!-- Make sure all your bars are the first things in your <body> -->
+   
+  </body>
+</html>

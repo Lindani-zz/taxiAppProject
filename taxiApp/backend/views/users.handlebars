@@ -1,0 +1,27 @@
+	<h1>Users</h1>
+
+<table>
+
+{{#users}}
+<tr>
+	<td>
+		{{firstName}}
+	</td>
+	<td>
+		{{lastName}}
+	</td>
+		<td>
+			{{userName}}
+		</td>
+	<td>
+		<a href="/users/edit/{{id}}">Edit</a>
+  		<a href="/users/delete/{{id}}">Delete</a>
+	</td>
+</tr>
+  
+
+{{/users}}
+</table>
+<form method="get" action="http://localhost:3000/users/register">
+    <button type="submit">Add User</button>
+</form>

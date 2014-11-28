@@ -1,0 +1,13 @@
+<center><h1>routes</h1>
+<form action="/users/register/add" method="POST">
+Route Name:
+ <select>
+ {{#routes}}
+ <option value="{{id}}">{{routeName}}</option>
+{{/routes}}
+
+  
+
+</select>
+Fare: <input type="dec" name="fare">	<input type="submit">
+</form> </center>
