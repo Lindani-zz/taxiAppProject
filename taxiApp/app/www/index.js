@@ -3,55 +3,84 @@ $(function ()
 	 $("body").load("pages/loginScreen.html", function () {
 
         //$.support.cors = true;
-    
+        
+        //var ipAddress = "http://192.168.127.251";
+        var ipAddress = "http://192.168.125.215";
 
-        $.getJSON( "http://192.168.125.215:4000/users", function( data ) {
+        $.getJSON( ipAddress + ":3000/users", function( users ) {
             $( "#contacts" ).html("");
-                    $.each(data, function(index, value){
-                        var details = "<a class=\"navigate-right\" id=\"" + value.id + "\" >" + value.firstName +" "+ value.lastName  + "</a>"
+                    $.each(users, function(index, user){
+                        var details = "<a class=\"navigate-right\" id=\"" + user.id + "\" >" + user.firstName +" "+ user.lastName  + "</a>"
                         $( "#contacts" ).append("<li class=\"table-view-cell\">" + details + "</li>");
                     });
 
                     $("#contacts").on("click", "li", function (evt) {
-                        $.getJSON( "http://192.168.125.215:4000/routes", function( data ) {//alert(evt.target.id);
+                        
+                        var userId = evt.target.id;
+
+                        $.getJSON(  ipAddress + ":3000/routes/" + userId, function( routes ) {;
 
                                 $("body").load("pages/routes.html", function()
                                 {
                                     $("#routes").html("");
-                                    $.each(data, function(index, value){
-                                            var details = "<a class=\"navigate-right\" id=\"" + value.id + "\" >" + value.routeName +" "+ value.fare  + "</a>"
+                                    $.each(routes, function(index, route){
+                                        //alert(route.route_id);
+                                        var details = "<a class=\"navigate-right\" id=\"" + route.route_id + "\" >" + route.routeName +" "+ route.fare  + "</a>"
                                           $( "#routes" ).append("<li class=\"table-view-cell\">" + details + "</li>");
                                     });
 
-                                    $("#routes").on("click","li", function (evt)
-                                    {   
-                                        alert("routes!");
-                                        $("body").load("pages/trips.html", function(){});
+                            $("#routes").on("click","li", function (routeEvt)
+                            {
+                                var routeId = routeEvt.target.id;   
+                                //alert("routes : " + routeId);
+                                
+                                var route = null;
+                                $.each(routes, function(index, theRoute){
+                                    if(theRoute.route_id == routeId)
+                                        route = theRoute;
+                                });
 
-                                        /*
-                                        $.getJSON( "http://192.168.125.215:4000/trips", function( data ) {
-                                            $("body").load("pages/trips.html", function()
-                                             {
-                                                $("#trips").html("");
-                                                    $.each(data, function(index, value)
-                                                        {
-                                                           var details = "<a class=\"navigate-right\" id=\"" + value.id + "\" >" + value.capacity+" "+ value.geoLocationStart  + "</a>"
-                                                            $( "#trips" ).append("<li class=\"table-view-cell\">" + details + "</li>"); 
-                                                        });
-                                            });
+                                $("body").load("pages/trips.html", function(){
+                                    /*
+                                    $("#trips").html("");
+                                       
+                                    */
+                                    $(".btn").click(function()
+                                    {
+                                        var capacity = $("#capacity").val();
+                                        $.post( ipAddress + ":3000/trips/add", 
+                                        { ownerId : userId, routeId : routeId, capacity : capacity }, function(trips) {
+                                    
                                         });
-                                        */
-                                    });
+                                         $.each(trips, function(index, trip){
+                                               var details = "<a class=\"navigate-right\" id=\"" + " "+ "\" >" + userId+" "+ routeId +" "+ capacity + "</a>"
+                                                $( "#trips" ).append("<li class=\"table-view-cell\">" + details + "</li>"); 
+                                        });
+
+                                         $("body").load("pages/tripEnd.html", function()
+                                            {   
+                                                var totalFare  = "<a class=\"navigate-right\" id=\"" + " "+ "\" >" + " Passengers: " + capacity + "<br>"+ " Total Fare Per Trip: R"+route.fare*capacity + "<br>" +"Route: "+ routeId +"</a>";
+                                                $("#tripEnd").append("<li class=\"table-view-cell\">" + totalFare + "</li>");
+                                                
+                                            });
+
+                                    }); 
+
+                                });
+                                
+
+                                
+                            });
 
 
-                                }); //display the routes from the database
+                        }); //display the routes from the database
 
                     });
 
-        });
+                });
                     
 
-        })
+            })
             .error(function() {
             alert( "error : length" + JSON.stringify (arguments) );
         });

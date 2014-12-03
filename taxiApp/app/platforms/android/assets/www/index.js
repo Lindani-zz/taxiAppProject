@@ -2,26 +2,64 @@ $(function ()
 {
 	 $("body").load("pages/loginScreen.html", function () {
 
-        $.support.cors = true;
+        //$.support.cors = true;
         
-        $.getJSON( "http://192.168.125.215:4000/routes", function( data ) {
-            $(".result").text( data[0].routeName );
-            //alert( "Load was performed. " + data.length );
-        }).error(function() {
-            alert( "error : length" + JSON.stringify (arguments) );
-            });
+        //var ipAddress = "http://192.168.127.251";
+        var ipAddress = "http://192.168.125.215";
 
-        $(".ola").click(function(){
-            $.get( "users", function( data ) {
-                                    $( "#contacts" ).html("");
+        $.getJSON( ipAddress + ":3000/users", function( data ) {
+            $( "#contacts" ).html("");
                     $.each(data, function(index, value){
-                        var details = "<a class=\"navigate-right\">" + value.firstName +" "+ value.lastName  + "</a>"
+                        var details = "<a class=\"navigate-right\" id=\"" + value.id + "\" >" + value.firstName +" "+ value.lastName  + "</a>"
                         $( "#contacts" ).append("<li class=\"table-view-cell\">" + details + "</li>");
                     });
-                    //alert( "Load was performed. " + data.length );
-                });
-        });// get users
 
+                    $("#contacts").on("click", "li", function (evt) {
+                        
+                        var userId = evt.target.id;
+
+                        $.getJSON(  ipAddress + ":3000/routes/" + userId, function( data ) {;
+
+                                $("body").load("pages/routes.html", function()
+                                {
+                                    $("#routes").html("");
+                                    $.each(data, function(index, value){
+                                            var details = "<a class=\"navigate-right\" id=\"" + value.id + "\" >" + value.routeName +" "+ value.fare  + "</a>"
+                                          $( "#routes" ).append("<li class=\"table-view-cell\">" + details + "</li>");
+                                    });
+
+                                    $("#routes").on("click","li", function (evt)
+                                    {   
+                                        alert("routes!");
+                                        $("body").load("pages/trips.html", function(){});
+
+                                        /*
+                                        $.getJSON( "http://192.168.125.215:4000/trips", function( data ) {
+                                            $("body").load("pages/trips.html", function()
+                                             {
+                                                $("#trips").html("");
+                                                    $.each(data, function(index, value)
+                                                        {
+                                                           var details = "<a class=\"navigate-right\" id=\"" + value.id + "\" >" + value.capacity+" "+ value.geoLocationStart  + "</a>"
+                                                            $( "#trips" ).append("<li class=\"table-view-cell\">" + details + "</li>"); 
+                                                        });
+                                            });
+                                        });
+                                        */
+                                    });
+
+
+                                }); //display the routes from the database
+
+                    });
+
+        });
+                    
+
+        })
+            .error(function() {
+            alert( "error : length" + JSON.stringify (arguments) );
+        });
         
         $("#register").click(function(){
         	//check details
