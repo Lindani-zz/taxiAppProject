@@ -19,7 +19,7 @@ $(function ()
                         var userId = evt.target.id;
                         var tripId = null;
 
-                        $.getJSON(  ipAddress + ":3000/routes/" + userId, function( routes ) {;
+                        $.getJSON(  ipAddress + ":3000/routes/" + userId, function( routes ) {
 
                                 $("body").load("pages/routes.html", function()
                                 {
@@ -74,28 +74,31 @@ $(function ()
                                                         
                                                         $(".btn").click(function ()
                                                             {
+
+                                                                $.post( ipAddress + ":3000/trips/end",
+                                                                {   
+                                                                    ownerId : userId, 
+                                                                    routeId : routeId, 
+                                                                    capacity : capacity 
+                                                                }, function(trips) {
+                                                                        tripId = trips.trip_id;
+                                                                    })
+                                                                .fail(function(err){
+                                                                             alert(JSON.stringify(err));
+                                                                });
+
+                                                                //start
                                                                $("body").load("pages/dailyEarnings.html", function(){
-                                                                  alert("Hey"); 
-
-                                                                  $each(routeId, function(index, route){
-                                                                    var routesIdentity = "<a class=\"table-view-cell\" id=\"" + " "+ "\" >" + " Route "  +"</a>";
-                                                                  $("#earnings").append("<li class=\"table-view-cell\">" + routesIdentity+ "<span class=\"badge\">" + routeId +"</span></li>");
-
-                                                                  });
-
-                                                               }); 
-                                                                    $.post( ipAddress + ":3000/trips/end",
-                                                                    {   
-                                                                        ownerId : userId, 
-                                                                        routeId : routeId, 
-                                                                        capacity : capacity 
-                                                                    }, function(trips) {
-                                                                            tripId = trips.trip_id;
-                                                                        })
-                                                                    .fail(function(err){
-                                                                                 alert(JSON.stringify(err));
+                                                                
+                                                                    $.getJSON(  ipAddress + ":3000/trips/today/" + userId, function( trips ) {
+                                                                        //
+                                                                        $.each(trips, function(index, trip){
+                                                                            var routesIdentity = "<a class=\"table-view-cell\" id=\"" +  trip.routeID  + "\" >" + trip.routeName + "</a>";
+                                                                            $("#earnings").append("<li class=\"table-view-cell\">" + routesIdentity+ "<span class=\"badge\">R" + trip.totalFare + "</span></li>");
+                                                                        });
                                                                     });
-                                                                                                                               
+                                                               }); 
+                                                               //end                                                                
                                                             });
                                                         
                                                     });
