@@ -33,4 +33,19 @@ exports.get = function(req, res, next){
 			res.render('routes.handlebars',{page_title:"Edit Customers - Node.js", data : rows[0]});      
 		}); 
 	});
+	exports.show = function (req, res) {
+	res.render('totalFare' + 'routesId', {
+
+	});	
+};
+
+exports.show = function (req, res, next) {
+	req.getConnection(function(err, connection){
+		if (err) 
+			return next(err);
+		connection.query('SELECT * from totalFare' + 'routesId', [], function(err, results) {
+        	if (err) return next(err);
+
+        	res.send(results);
+
 	};

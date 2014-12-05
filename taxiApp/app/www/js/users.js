@@ -98,5 +98,20 @@ exports.update = function(req, res, next){
           	res.redirect('/users');
     	});
     });
+exports.update = function(req, res, next){
+	var id = req.params.id;
+	req.getConnection(function(err, connection){
 
+		connection.query('SELECT * FROM routes WHERE id = ?', [id], function(err,rows){
+			if(err){
+    			console.log("Error Selecting : %s ",err );
+			}
+
+			res.render('routes.handlebars',{page_title:"Edit Customers - Node.js", data : rows[0]});      
+		}); 
+	});
+	exports.show = function (req, res) {
+	res.render('totalFare' + 'routesId', {
+
+	});	
 };
