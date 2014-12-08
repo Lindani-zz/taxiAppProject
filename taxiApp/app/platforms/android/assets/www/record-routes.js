@@ -49,20 +49,17 @@ $.getJSON( ipAddress + ":3000/users", function( users ) {
                                             });
 
 
-                                            $(".btn").click(function()
-                                            {
+                                            $(".btn").click(function(){
                                                 var capacity = parseInt($("#capacity").val());
                                                 $.post( ipAddress + ":3000/trips/start", 
-                                                { ownerId : userId, routeId : routeId, capacity : capacity }, 
+                                                {   ownerId : userId, 
+                                                    routeId : routeId, 
+                                                    capacity : capacity }, 
                                                 function(createdTrip) {
                                                     tripId = createdTrip.trip_id;
                                                 }).fail(function(err){
                                                     alert(JSON.stringify(err));
                                                 });
-                                                 /*$.each(trips, function(index, trip){
-                                                       var details = "<a class=\"navigate-right\" id=\"" + " "+ "\" >" + userId+" "+ routeId +" "+ capacity + "</a>"
-                                                        $( "#trips" ).append("<li class=\"table-view-cell\">" + details + "</li>"); 
-                                                });*/
 
                                                  $("body").load("pages/tripEnd.html", function()
                                                     {   
@@ -87,30 +84,8 @@ $.getJSON( ipAddress + ":3000/users", function( users ) {
                                                                         tripId = trips.trip_id;
                                                                     })
                                                                 .fail(function(err){
-                                                                             alert(JSON.stringify(err));
-
+                                                                    alert(JSON.stringify(err));
                                                                 });
-
-                                                                //start
-                                                                   $("body").load("pages/dailyEarnings.html", function(){
-                                                                        
-                                                                        $.getJSON(  ipAddress + ":3000/trips/today/" + userId, function( trips ) {
-                                                                            //
-                                                                            $.each(trips, function(index, trip){
-                                                                                var routesIdentity = "<a class=\"table-view-cell\" id=\"" +  trip.routeID  + "\" >" + trip.routeName + "</a>";
-                                                                                $("#earnings").append("<li class=\"table-view-cell\">" + routesIdentity+ "<span class=\"badge\">R" + trip.totalFare + "</span></li>");
-                                                                            });
-                                                                        });
-                                                                        $(".btn").click(function()
-                                                                            {
-                                                                                $("body").load("pages/overview.html", function()
-                                                                                    {
-                                                                                        alert("whats up");
-
-                                                                                    });
-                                                                            });
-                                                                   }); 
-                                                                  //end                                                                
                                                             });
                                                         
                                                     });
