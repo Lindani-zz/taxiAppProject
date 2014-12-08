@@ -1,0 +1,76 @@
+<html>
+<title>Trips</title>
+<head></head>
+<link rel="stylesheet" type="text/css" href="ratchet.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="geolocation.js"></script>
+<script type="text/javascript">
+	$(function(argument) {
+		//// body...
+		//alert("aola");
+
+		$.get( "trips", function( data ) {
+  			$(".result").text( data[0].routeName );
+  			//alert( "Load was performed. " + data.length );
+  			var win = function(p) {
+            clearTimeout(timeoutTimer.timer);
+            if (!(timeoutTimer.timer)) {
+                // Timeout already happened, or native fired error callback for
+                // this geo request.
+                // Don't continue with success callback.
+                return;
+            }
+            var pos = new Position(
+                {
+                    latitude:p.latitude,
+                    longitude:p.longitude,
+                    altitude:p.altitude,
+                    accuracy:p.accuracy,
+                    heading:p.heading,
+                    velocity:p.velocity,
+                    altitudeAccuracy:p.altitudeAccuracy
+                },
+                (p.timestamp === undefined ? new Date() : ((p.timestamp instanceof Date) ? p.timestamp : new Date(p.timestamp)))
+            );
+            geolocation.lastPosition = pos;
+            successCallback(pos);
+        };
+        var fail = function(e) {
+            clearTimeout(timeoutTimer.timer);
+            timeoutTimer.timer = null;
+            var err = new PositionError(e.code, e.message);
+            if (errorCallback) {
+                errorCallback(err);
+            }
+        };
+		});
+
+		$(".ola").click(function(){
+			$.get( "trips", function( data ) {
+  				  					$( "#trips" ).html("");
+  					$.each(data, function(index, value){
+  						var details = "<a class=\"navigate-right\">" + geoLocationEndTime +" "+ capacity  + "</a>"
+  						$( "#trips" ).append("<li class=\"table-view-cell\">" + details + "</li>");
+  					});
+  					///alert( "Load was performed. " + data.length );
+				});
+		});
+
+	})
+</script>
+<body>
+		<h1>TRIPS</h1>
+			<div class="result">
+			</div>
+				<div class="ola" >Display trips</div>
+
+		<!-- use append to create a list of trips -->	
+				<ul class="table-view">
+ 			 <li class="table-view-cell">Trips <textarea rows="5"></textarea><li />
+			<li class="table-view-cell">number of passengers <textarea rows="5"></textarea> </li>
+  			<button onclick="btn btn-primary, "myFunction()"">Start Trip</button>
+				
+</ul>
+ 
+    </body>
+</html>

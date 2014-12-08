@@ -7,7 +7,8 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     products = require('./routes/products'),
     users = require('./routes/users'),
-    routes = require('./routes/routes');
+    routes = require('./routes/routes'),
+    trips = require ('./routes/trips');
     
 
 
@@ -51,17 +52,19 @@ app.get('/users/delete/:id', users.delete);
 app.get('/users/edit/:id', users.get);
 app.post('/users/update/:id', users.update);
 
+app.post('/trips/add', trips.add);
 
-app.get('/routes', routes.show);
+app.post('/trips/start', trips.start_trip);
+app.post('/trips/end', trips.end_trip);
+app.get('/trips/today/:user_id', trips.today_trips);
+app.get('/trips/all/:user_id', trips.all_user_trips);
 
-app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
+
+app.get('/routes/:user_id', routes.show);
+
 
 //start everything up
-app.listen(4000, function () {
-    console.log('express-handlebars example server listening on: 4000');
+app.listen(3000, function () {
+    console.log('express-handlebars example server listening on: 3000');
 
 });
