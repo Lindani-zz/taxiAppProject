@@ -40,7 +40,14 @@ $(function () {
                  $("#dailyOverview").click(function (){
                     $("body").load("pages/dailyEarnings.html", function(){
                         showDailyEarnings(userId);
+                        $(".btn").click(function(){
+                            $("body").load("pages/register.html", function ()
+                                    {
+                                       
+                                    });
+                        });
                     });
+
                 });
                  
             });
@@ -50,7 +57,14 @@ $(function () {
     function loadRoutes(userId){
         $.getJSON(  ipAddress + ":3000/routes/" + userId, function( routes ) {
 
+
                 $("body").load("pages/routes.html", function(){
+                    $(".home").click(function(){
+                            $("body").load("pages/startUpScreen.html", function ()
+                                    {
+                                        
+                                    });
+                        });
                     $("#routes").html("");
                     $.each(routes, function(index, route){
                         var details = "<a class=\"navigate-right\" id=\"" + route.route_id + "\" >" + route.routeName +" "+ route.fare  + "</a>"
@@ -100,7 +114,8 @@ $(function () {
                     alert(JSON.stringify(err));
                 });
 
-                 $("body").load("pages/tripEnd.html", function(){   
+                 $("body").load("pages/tripEnd.html", function(){ 
+
                         var totalFare  = "<a class=\"table-view-cell\" id=\"" + " "+ "\" >" + " Total Fare Per Trip "+"</a>";
                         var passengers = "<a class=\"table-view-cell\" id=\"" + " "+ "\" >" + " Passengers " + " " +"</a>";
                         var routesIdentity = "<a class=\"table-view-cell\" id=\"" + " "+ "\" >" + " Route "  +"</a>";
@@ -125,6 +140,7 @@ $(function () {
                                 .fail(function(err){
                                     alert(JSON.stringify(err));
                                 });
+                                
                             });
                         
                     });
@@ -138,7 +154,13 @@ $(function () {
     }
 
     function showDailyEarnings(userId){
-        $("body").load("pages/dailyEarnings.html", function(){                                                            
+        $("body").load("pages/dailyEarnings.html", function(){
+        $(".btn").click(function(){
+                            $("body").load("pages/startUpScreen.html", function ()
+                                    {
+                                        alert("whats up");
+                                    });
+                        });                                                            
             $.getJSON(  ipAddress + ":3000/trips/today/" + userId, function( trips ) {
                 //
                 $.each(trips, function(index, trip){
@@ -150,7 +172,13 @@ $(function () {
     };
 
     function showOverviewEarnings(userId){
-        $("body").load("pages/overview.html", function(){                                                            
+        $("body").load("pages/overview.html", function(){ 
+            $(".btn").click(function(){
+                            $("body").load("pages/startUpScreen.html", function ()
+                                    {
+                                        
+                                    });
+                        });                                        
             $.getJSON(  ipAddress + ":3000/trips/all/" + userId, function( trips ) {
                 //
                 $.each(trips, function(index, trip){

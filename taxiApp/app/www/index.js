@@ -4,9 +4,17 @@ $(function () {
     
     function loginScreen(func){
     	$("body").load("pages/loginScreen.html", func);
+
+
+    }
+    function startUpScreen(func){
+        $("body").load("pages/startUpScreen.html", func);
     }
 
+
     function showUsers(){
+        //alert("show users");
+        
         $.getJSON( ipAddress + ":3000/users", function( users ) {
             $( "#contacts" ).html("");
             $.each(users, function(index, user){
@@ -18,14 +26,24 @@ $(function () {
 
     }
 
-    function clickUser(userId){
+    function clickUser(){
 
         $("#contacts").on("click", "li", function (evt) {
+            
+
+            //$("#home").click(function (){
+            //});
                         
-            var userId = evt.target.id;
-            var tripId = null;
+            userId = evt.target.id;
+            showStartupScreen();
             //alert(userId);
-            $("body").load("pages/startUpScreen.html", function(){
+
+        });
+    }
+
+    function showStartupScreen(){
+        var tripId = null;
+        $("body").load("pages/startUpScreen.html", function(){
                 $("#start").click(function(){
                     $("body").load("pages/routes.html", function(){
                         loadRoutes(userId);
@@ -40,17 +58,34 @@ $(function () {
                  $("#dailyOverview").click(function (){
                     $("body").load("pages/dailyEarnings.html", function(){
                         showDailyEarnings(userId);
+                        $(".btn").click(function(){
+                            $("body").load("pages/register.html", function ()
+                                    {
+                                       
+                                    });
+                        });
                     });
+
                 });
-                 
+
+                $("#back").click(function (){
+                    loginScreen(showUsers);
+                });
+               
             });
-        });
     }
 
     function loadRoutes(userId){
         $.getJSON(  ipAddress + ":3000/routes/" + userId, function( routes ) {
 
+
                 $("body").load("pages/routes.html", function(){
+                    $("#home").click(function(){
+                            showStartupScreen();
+                        });
+                    $("#back").click(function(){
+                            showStartupScreen();
+                        });
                     $("#routes").html("");
                     $.each(routes, function(index, route){
                         var details = "<a class=\"navigate-right\" id=\"" + route.route_id + "\" >" + route.routeName +" "+ route.fare  + "</a>"
@@ -100,7 +135,8 @@ $(function () {
                     alert(JSON.stringify(err));
                 });
 
-                 $("body").load("pages/tripEnd.html", function(){   
+                 $("body").load("pages/tripEnd.html", function(){ 
+
                         var totalFare  = "<a class=\"table-view-cell\" id=\"" + " "+ "\" >" + " Total Fare Per Trip "+"</a>";
                         var passengers = "<a class=\"table-view-cell\" id=\"" + " "+ "\" >" + " Passengers " + " " +"</a>";
                         var routesIdentity = "<a class=\"table-view-cell\" id=\"" + " "+ "\" >" + " Route "  +"</a>";
@@ -124,40 +160,55 @@ $(function () {
                                     })
                                 .fail(function(err){
                                     alert(JSON.stringify(err));
-                                });
-                            });
-                        
+                                });       
+                        });
                     });
+                });
             });
-
-        });
-    }
+        }
 
     function loadOverview(){
 
     }
 
     function showDailyEarnings(userId){
-        $("body").load("pages/dailyEarnings.html", function(){                                                            
+        $("body").load("pages/dailyEarnings.html", function(){
+        
             $.getJSON(  ipAddress + ":3000/trips/today/" + userId, function( trips ) {
                 //
+                var  totalFare = 0;    
                 $.each(trips, function(index, trip){
                     var routesIdentity = "<a class=\"table-view-cell\" id=\"" +  trip.routeID  + "\" >" + trip.routeName + "</a>";
                     $("#earnings").append("<li class=\"table-view-cell\">" + routesIdentity+ "<span class=\"badge\">R" + trip.totalFare + "</span></li>");
+                    totalFare += trip.totalFare;        
                 });
+
+                $("#totalFare").text("R" + totalFare + ".00");
+            });
+
+            $("#back").click(function (){
+                showStartupScreen();
             });
        });
     };
 
     function showOverviewEarnings(userId){
-        $("body").load("pages/overview.html", function(){                                                            
+        $("body").load("pages/overview.html", function(){ 
+                                             
             $.getJSON(  ipAddress + ":3000/trips/all/" + userId, function( trips ) {
-                //
+                var  totalFare = 0;   
                 $.each(trips, function(index, trip){
                     var routesIdentity = "<a class=\"table-view-cell\" id=\"" +  trip.routeID  + "\" >" + trip.routeName + "</a>";
                     $("#overview").append("<li class=\"table-view-cell\">" + routesIdentity+ "<span class=\"badge\">R" + trip.totalFare + "</span></li>");
+                    totalFare += trip.totalFare;
                 });
+                 $("#allTotalFare").text("R" + totalFare + ".00");
             });
+
+            $("#back").click(function (){
+                showStartupScreen();
+            });
+
        });
     };
 
