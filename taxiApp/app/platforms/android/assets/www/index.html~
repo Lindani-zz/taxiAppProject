@@ -37,10 +37,32 @@
                 <p class="event received">Device is Ready</p>
             </div>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="cordova.js" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+         function onLoad() {
+        document.addEventListener("deviceready", onDeviceReady, false);
+    }
+
+    // Cordova is loaded and it is now safe to call Cordova methods
+    //
+    function onDeviceReady() {
+        // Register the event listener
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    // Handle the back button
+    //
+    function onBackKeyDown() {
+    }
+
+        </script>
+
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>
     </body>
+    <body onload="onLoad()">
+  </body>
+
 </html>

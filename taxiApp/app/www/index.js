@@ -1,13 +1,18 @@
 $(function () {
 
-    var ipAddress = "http://192.168.125.215";
+    //var ipAddress = "http://192.168.125.215:3000";
+    var ipAddress = "http://taxitrax.projectcodex.co";
     
+
+    var backAction = null;
+
     function loginScreen(func){
     	$("body").load("pages/loginScreen.html", func);
 
 
     }
     function startUpScreen(func){
+
         $("body").load("pages/startUpScreen.html", func);
     }
 
@@ -15,7 +20,7 @@ $(function () {
     function showUsers(){
         //alert("show users");
         
-        $.getJSON( ipAddress + ":3000/users", function( users ) {
+        $.getJSON( ipAddress + "/users", function( users ) {
             $( "#contacts" ).html("");
             $.each(users, function(index, user){
                 var details = "<a class=\"navigate-right\" id=\"" + user.id + "\" >" + user.firstName +" "+ user.lastName  + "</a>"
@@ -68,24 +73,32 @@ $(function () {
 
                 });
 
-                $("#back").click(function (){
+                  $("#quit").click(function(){
+                        navigator.app.exitApp();
+                    })
+                  ;
+                backAction = function (){
                     loginScreen(showUsers);
-                });
+                };
+
+                $("#back").click(backAction);
                
             });
     }
 
     function loadRoutes(userId){
-        $.getJSON(  ipAddress + ":3000/routes/" + userId, function( routes ) {
+        $.getJSON(  ipAddress + "/routes/" + userId, function( routes ) {
 
 
                 $("body").load("pages/routes.html", function(){
                     $("#home").click(function(){
                             showStartupScreen();
                         });
-                    $("#back").click(function(){
-                            showStartupScreen();
-                        });
+                    backAction = function (){
+                    showStartupScreen();
+                        };
+                    $("#back").click(backAction);
+
                     $("#routes").html("");
                     $.each(routes, function(index, route){
                         var details = "<a class=\"navigate-right\" id=\"" + route.route_id + "\" >" + route.routeName +" "+ route.fare  + "</a>"
@@ -109,7 +122,11 @@ $(function () {
 
     function loadStartTripScreen(userId, routeId, route, capacity){
 
-        $("body").load("pages/trips.html", function(){                           
+        $("body").load("pages/trips.html", function(){ 
+         backAction = function (){
+                    loadRoutes(userId);
+                };
+            $("#back").click(backAction);                          
             $("#capacity").bind("propertychange change click keyup input paste", function(){
 
                 if($("#capacity").val() <= 0)
@@ -125,7 +142,7 @@ $(function () {
             $(".btn").click(function(){
                 
                 var capacity = parseInt($("#capacity").val());
-                $.post( ipAddress + ":3000/trips/start", 
+                $.post( ipAddress + "/trips/start", 
                 {   ownerId : userId, 
                     routeId : routeId, 
                     capacity : capacity },
@@ -147,7 +164,7 @@ $(function () {
                         $(".btn").click(function ()
                             {
 
-                                $.post( ipAddress + ":3000/trips/end",
+                                $.post( ipAddress + "/trips/end",
                                 {   
                                     ownerId : userId, 
                                     routeId : routeId, 
@@ -174,7 +191,7 @@ $(function () {
     function showDailyEarnings(userId){
         $("body").load("pages/dailyEarnings.html", function(){
         
-            $.getJSON(  ipAddress + ":3000/trips/today/" + userId, function( trips ) {
+            $.getJSON(  ipAddress + "/trips/today/" + userId, function( trips ) {
                 //
                 var  totalFare = 0;    
                 $.each(trips, function(index, trip){
@@ -185,17 +202,17 @@ $(function () {
 
                 $("#totalFare").text("R" + totalFare + ".00");
             });
-
-            $("#back").click(function (){
-                showStartupScreen();
-            });
+                 backAction = function (){
+                    showStartupScreen();
+                };
+            $("#back").click(backAction);
        });
     };
 
     function showOverviewEarnings(userId){
         $("body").load("pages/overview.html", function(){ 
                                              
-            $.getJSON(  ipAddress + ":3000/trips/all/" + userId, function( trips ) {
+            $.getJSON(  ipAddress + "/trips/all/" + userId, function( trips ) {
                 var  totalFare = 0;   
                 $.each(trips, function(index, trip){
                     var routesIdentity = "<a class=\"table-view-cell\" id=\"" +  trip.routeID  + "\" >" + trip.routeName + "</a>";
@@ -205,18 +222,20 @@ $(function () {
                  $("#allTotalFare").text("R" + totalFare + ".00");
             });
 
-            $("#back").click(function (){
-                showStartupScreen();
-            });
-
+            backAction = function (){
+                    showStartupScreen();
+                };
+            $("#back").click(backAction);
        });
     };
 
 
 
     loginScreen(showUsers);
-    //showUsers();
-
+    
+    document.addEventListener("backbutton", function(){
+        backAction();
+    });
 
 
 });
